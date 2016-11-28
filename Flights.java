@@ -52,8 +52,8 @@ public class Flights {
         try{
             connection=Database.getConnection();
             statement = connection.createStatement();
-            resultSet=statement.executeQuery("SELECT names FROM Flights");    
-          
+            resultSet=statement.executeQuery("SELECT names FROM Flights");   
+            
             while(resultSet.next())
                     names.add(resultSet.getObject(1).toString());
         

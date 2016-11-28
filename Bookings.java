@@ -124,4 +124,39 @@ public class Bookings {
         
         return bookings;
     }
+    
+    public static ArrayList<String> getBookingsByDay(String fName, String dName){
+        Connection connection;
+            ResultSet resultSet;
+            Statement statement;
+            ArrayList<String> bookings = new ArrayList();
+            String customerName="";
+            String temp="";
+            
+        try{
+            connection=Database.getConnection();
+            PreparedStatement getBooks = connection.prepareStatement("SELECT customer, flight, day FROM Bookings WHERE flight = ? and day = ?");
+            getBooks.setString(1, fName);
+            getBooks.setString(2, dName);
+            resultSet=getBooks.executeQuery();    
+            
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int cols = metaData.getColumnCount();
+            
+            while(resultSet.next()){
+                for(int i = 1; i<=cols;i++){
+                    if(metaData.getColumnName(i).equalsIgnoreCase("Customer"))
+                        customerName=resultSet.getObject(i).toString();
+                }
+                
+                temp = String.format("%-70s %-70s %1s",customerName, fName, dName);
+                bookings.add(temp);
+                //bookings.add(new Bookings(new Customer(customerName), new Flights(flightName), new Days(dayDate)));               
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        
+        return bookings;
+    }
 }

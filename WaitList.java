@@ -100,4 +100,43 @@ public class WaitList extends Bookings{
         return waitlist;
     }
    
+    public static ArrayList<String> getWaitListStatus(String fName, String dName){
+        Connection connection;
+            ResultSet resultSet;
+            Statement statement;
+            ArrayList<String> waitlist = new ArrayList();
+            String customerName="";
+            String tsName="";
+            String temp="";
+            
+        try{
+            connection=Database.getConnection();
+            PreparedStatement getBooks = connection.prepareStatement("SELECT customer, flight, day, timestamp FROM WaitList WHERE flight = ? and day = ?");
+            getBooks.setString(1, fName);
+            getBooks.setString(2, dName);
+            resultSet=getBooks.executeQuery();    
+            
+            ResultSetMetaData metaData = resultSet.getMetaData();
+            int cols = metaData.getColumnCount();
+            
+            while(resultSet.next()){
+                for(int i = 1; i<=cols;i++){
+                    if(metaData.getColumnName(i).equalsIgnoreCase("Customer"))
+                        customerName=resultSet.getObject(i).toString();
+                    
+                    if(metaData.getColumnName(i).equalsIgnoreCase("Timestamp"))
+                        tsName=resultSet.getTime(i).toString();
+                }
+                
+                temp = String.format("%-40s %-40s %40s %40s",customerName, fName, dName, tsName);
+                waitlist.add(temp);
+                //bookings.add(new Bookings(new Customer(customerName), new Flights(flightName), new Days(dayDate)));               
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        
+        return waitlist;
+    }
+    
 }
