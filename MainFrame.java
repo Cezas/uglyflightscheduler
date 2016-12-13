@@ -2,6 +2,8 @@ package FlightSchedulerRobertYan_rjy5060;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.ParseException;
+import javax.swing.ImageIcon;
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -39,15 +41,25 @@ public class MainFrame extends javax.swing.JFrame {
         daylabel = new javax.swing.JLabel();
         daybox = new javax.swing.JComboBox<>();
         bookbutton = new javax.swing.JButton();
-        error = new javax.swing.JOptionPane();
+        dialog = new javax.swing.JOptionPane();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jPanel2 = new myJPanel("Airplane-Taking-Off.jpg");
         jScrollPane1 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList(Bookings.getBookingsByDay().toArray());
         jPanel3 = new myJPanel("Dining_and_Shopping.jpg");
         jScrollPane2 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList(WaitList.getWaitList().toArray());
+        jPanel4 = new myJPanel("22610665562.png");
+        addbutton = new javax.swing.JButton();
+        flightnamefield = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        flightseatfield = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        dayfield = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -64,12 +76,15 @@ public class MainFrame extends javax.swing.JFrame {
         setTitle("Jay Jay's Extra Virgin Airlines");
         setPreferredSize(new java.awt.Dimension(900, 600));
         setResizable(false);
+        setSize(new java.awt.Dimension(900, 600));
 
         tabs.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 tabsStateChanged(evt);
             }
         });
+
+        jPanel1.setPreferredSize(new java.awt.Dimension(900, 600));
 
         namelabel.setBackground(new java.awt.Color(255, 255, 255));
         namelabel.setFont(new java.awt.Font("Comic Sans MS", 1, 18)); // NOI18N
@@ -103,9 +118,9 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        error.addComponentListener(new java.awt.event.ComponentAdapter() {
+        dialog.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
-                errorComponentHidden(evt);
+                dialogComponentHidden(evt);
             }
         });
 
@@ -123,52 +138,72 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Status by Customer");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setFont(new java.awt.Font("Eras Demi ITC", 0, 16)); // NOI18N
+        jButton4.setText("CANCEL");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(error, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(dialog, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(nameText, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(namelabel)
-                        .addGap(10, 10, 10)))
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(bookbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(42, 42, 42))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
-                        .addComponent(flightlabel)
-                        .addGap(105, 105, 105)
-                        .addComponent(daylabel))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(flightbox, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(daybox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 289, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(jButton1)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(nameText, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(namelabel)
+                                .addGap(10, 10, 10)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addComponent(flightlabel)
+                                .addGap(105, 105, 105)
+                                .addComponent(daylabel))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(flightbox, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(daybox, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(80, 80, 80))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(bookbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(116, 116, 116))
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(90, 90, 90))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap(27, Short.MAX_VALUE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(flightlabel)
                             .addComponent(daylabel)
@@ -184,10 +219,14 @@ public class MainFrame extends javax.swing.JFrame {
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton2)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton3)
+                        .addGap(82, 82, 82)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)
                         .addComponent(bookbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addComponent(error, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(dialog, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27))
         );
 
@@ -207,16 +246,16 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(222, 222, 222)
+                .addGap(98, 98, 98)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 602, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(283, Short.MAX_VALUE))
+                .addContainerGap(200, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(131, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(93, 93, 93)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(126, 126, 126))
+                .addContainerGap(153, Short.MAX_VALUE))
         );
 
         tabs.addTab("Booked", jPanel2);
@@ -237,17 +276,83 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(192, 192, 192)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 675, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(240, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(108, 108, 108)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(167, Short.MAX_VALUE))
+                .addContainerGap(156, Short.MAX_VALUE))
         );
 
         tabs.addTab("Waiting", jPanel3);
+
+        addbutton.setText("Add Flight");
+        addbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addbuttonActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel1.setText("New Flight");
+
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel2.setText("Seats");
+
+        dayfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                dayfieldActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel3.setText("New Day: Hit Enter to submit");
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(82, 82, 82)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(flightnamefield, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
+                .addGap(43, 43, 43)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(flightseatfield, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64)
+                        .addComponent(addbutton))
+                    .addComponent(jLabel2))
+                .addGap(115, 115, 115)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(dayfield, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGap(39, 39, 39)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(flightnamefield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(flightseatfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addbutton)
+                    .addComponent(dayfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(575, Short.MAX_VALUE))
+        );
+
+        tabs.addTab("Admin", jPanel4);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -270,7 +375,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void bookbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookbuttonActionPerformed
         // TODO add your handling code here: Convert into appropiate values
         if (nameText.getText().equals(""))
-            error.showMessageDialog(this, "Please enter a name");
+            dialog.showMessageDialog(this, "Please enter a name");
             
         else{
             
@@ -283,20 +388,24 @@ public class MainFrame extends javax.swing.JFrame {
         Bookings b = new Bookings(c, f, day);
         
         int result=Bookings.insertBooking(b);
-        if(result==0)//if good book
+        if(result==0){//if good book
             tabs.setSelectedIndex(1);
-        if(result==1)//if good wait
+            dialog.showMessageDialog(this, "You have successfully booked your flight.", "Booking Successful", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
+        }
+        if(result==1){//if good wait
             tabs.setSelectedIndex(2);
-        if(result==2)//if conflict key
-            error.showMessageDialog(this, "Cannot book for more than one flight", "Booking Error", error.ERROR_MESSAGE);
-        
+            dialog.showMessageDialog(this, "You have been put on a waitlist.", "WaitList Successful", dialog.INFORMATION_MESSAGE, new ImageIcon("tumblr_m30rap5QLo1r2o2do.png"));
+        }
+        if(result==2){//if conflict key
+            dialog.showMessageDialog(this, "Cannot book for more than one flight", "Booking Error", dialog.INFORMATION_MESSAGE, new ImageIcon("b93.jpg"));
+        }
         
         }
     }//GEN-LAST:event_bookbuttonActionPerformed
 
-    private void errorComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_errorComponentHidden
+    private void dialogComponentHidden(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_dialogComponentHidden
         // TODO add your handling code here:
-    }//GEN-LAST:event_errorComponentHidden
+    }//GEN-LAST:event_dialogComponentHidden
 
     private void tabsStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_tabsStateChanged
         // TODO add your handling code here:
@@ -325,21 +434,80 @@ public class MainFrame extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       String fName = flightbox.getSelectedItem().toString();         
+      
        String dName = daybox.getSelectedItem().toString();
        
        tabs.setSelectedIndex(2);
        
        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = WaitList.getWaitListStatus(fName, dName).toArray(new String[0]);
+            String[] strings = WaitList.getWaitListStatusbyDay(dName).toArray(new String[0]);
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
+        // TODO add your handling code here:
+        String fName = flightnamefield.getText();
+        int seats = Integer.parseInt(flightseatfield.getText());
+        
+        Flights.addFlight(fName, seats);
+    }//GEN-LAST:event_addbuttonActionPerformed
+
+    private void dayfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayfieldActionPerformed
+        // TODO add your handling code here:       
+        //Date temp;   
+        try{
+           Date temp=java.sql.Date.valueOf(dayfield.getText());
+           Days.addDay(temp);
+           dialog.showMessageDialog(this, dayfield.getText()+" has been added as a day", "Successful add", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
+        }catch(IllegalArgumentException e){
+            dialog.showMessageDialog(this, "Make sure to enter in sql-date format 'year, month, day' (yyyy-MM-dd) ", "Conversion Error", dialog.ERROR_MESSAGE);
+            
+        }
+        
+       
+           
+    }//GEN-LAST:event_dayfieldActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        String cName = nameText.getText();       
+        
+       tabs.setSelectedIndex(1);
+       
+       jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = Customer.getStatus(cName).toArray(new String[0]);
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+       
+       dialog.showMessageDialog(this, "These are the flights you have registered for.", "Customer Status", dialog.INFORMATION_MESSAGE, new ImageIcon("tumblr_m30rap5QLo1r2o2do.png"));
+       
+       
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        String dropResult;
+        String cName = nameText.getText();
+        String fName = flightbox.getSelectedItem().toString(); 
+        String dName = daybox.getSelectedItem().toString();
+        
+        dropResult = Bookings.dropFlight(cName, fName, dName);
+        
+        if(dropResult=="")
+            dialog.showMessageDialog(this, "Nothing to drop", "No Drop", dialog.INFORMATION_MESSAGE, new ImageIcon("tumblr_m30rap5QLo1r2o2do.png"));
+        
+        if(dropResult=="waitlist")
+            dialog.showMessageDialog(this, "You have been dropped from the waitlist", "Dropped from Waitlist", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
+        
+        if(dropResult=="bookings")
+            dialog.showMessageDialog(this, "You have been dropped from the Bookings", "Dropped from Bookings", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -377,20 +545,30 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addbutton;
     private javax.swing.JButton bookbutton;
     private javax.swing.JComboBox<String> daybox;
+    private javax.swing.JTextField dayfield;
     private javax.swing.JLabel daylabel;
-    private javax.swing.JOptionPane error;
+    private javax.swing.JOptionPane dialog;
     private javax.swing.JComboBox<String> flightbox;
     private javax.swing.JLabel flightlabel;
+    private javax.swing.JTextField flightnamefield;
+    private javax.swing.JTextField flightseatfield;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField nameText;

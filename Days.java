@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 //import java.util.Date;
 import java.sql.Date;
+import java.sql.PreparedStatement;
 
 /**
  *
@@ -47,5 +48,17 @@ public class Days {
         }
         
         return days;
+    }
+    
+    public static void addDay(Date d){
+         try{
+            Connection connection = Database.getConnection();
+            PreparedStatement insertFlight = connection.prepareStatement("INSERT INTO days values ?"); 
+            insertFlight.setDate(1, d);
+            insertFlight.executeUpdate();
+            
+        }catch(SQLException e){ //check for invalid conversion
+            e.printStackTrace();
+        }
     }
 }

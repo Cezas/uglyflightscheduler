@@ -64,8 +64,18 @@ public class Flights {
         return names;
     }
     
-    public static void addFlight(String name, int seats){
-        //todo later
+    public static void addFlight(String name, int seats){        
+        try{
+            Connection connection = Database.getConnection();
+            PreparedStatement insertFlight = connection.prepareStatement("INSERT INTO flights (names, seats) values (?, ?)"); 
+            insertFlight.setString(1, name);
+            insertFlight.setInt(2, seats);
+            insertFlight.executeUpdate();
+            
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        
     }
     
     public static int getFlightSeats(String flight){

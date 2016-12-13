@@ -100,20 +100,20 @@ public class WaitList extends Bookings{
         return waitlist;
     }
    
-    public static ArrayList<String> getWaitListStatus(String fName, String dName){
+    public static ArrayList<String> getWaitListStatusbyDay(String dName){
         Connection connection;
             ResultSet resultSet;
             Statement statement;
             ArrayList<String> waitlist = new ArrayList();
             String customerName="";
             String tsName="";
+            String flightName="";
             String temp="";
             
         try{
             connection=Database.getConnection();
-            PreparedStatement getBooks = connection.prepareStatement("SELECT customer, flight, day, timestamp FROM WaitList WHERE flight = ? and day = ?");
-            getBooks.setString(1, fName);
-            getBooks.setString(2, dName);
+            PreparedStatement getBooks = connection.prepareStatement("SELECT customer, flight, day, timestamp FROM WaitList WHERE day = ?");
+            getBooks.setString(1, dName);
             resultSet=getBooks.executeQuery();    
             
             ResultSetMetaData metaData = resultSet.getMetaData();
@@ -121,6 +121,9 @@ public class WaitList extends Bookings{
             
             while(resultSet.next()){
                 for(int i = 1; i<=cols;i++){
+                    if(metaData.getColumnName(i).equalsIgnoreCase("Flight"))
+                        flightName=resultSet.getObject(i).toString();
+                    
                     if(metaData.getColumnName(i).equalsIgnoreCase("Customer"))
                         customerName=resultSet.getObject(i).toString();
                     
@@ -128,7 +131,7 @@ public class WaitList extends Bookings{
                         tsName=resultSet.getTime(i).toString();
                 }
                 
-                temp = String.format("%-40s %-40s %40s %40s",customerName, fName, dName, tsName);
+                temp = String.format("%-40s %-40s %40s %40s",customerName, flightName, dName, tsName);
                 waitlist.add(temp);
                 //bookings.add(new Bookings(new Customer(customerName), new Flights(flightName), new Days(dayDate)));               
             }
