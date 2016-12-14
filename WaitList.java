@@ -22,21 +22,16 @@ import java.util.ArrayList;
  */
 public class WaitList extends Bookings{
 
-    private final Timestamp timestamp;
-    public WaitList(Customer c, Flights f, Days d){ 
-        super(c,f,d);
-        timestamp=new Timestamp(System.currentTimeMillis());
-    }
-    
-    public Timestamp getTime(){
-        return timestamp;
+
+    public WaitList(Customer c, Flights f, Days d, Timestamp t){ 
+        super(c,f,d,t);
     }
     
     public static int insertWaiting(Bookings b){
             Connection connection;
             ResultSet resultSet;
             Statement statement;
-            WaitList waitlist = new WaitList(b.getCustomer(), b.getFlight(), b.getDay());
+            WaitList waitlist = new WaitList(b.getCustomer(), b.getFlight(), b.getDay(), b.getTime());
         try{
             //check to see if attempted book still has seats
             connection=Database.getConnection();

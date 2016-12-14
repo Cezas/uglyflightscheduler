@@ -2,7 +2,9 @@ package FlightSchedulerRobertYan_rjy5060;
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.ParseException;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -60,6 +62,9 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         dayfield = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        dropfield = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -297,7 +302,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 0, 0));
-        jLabel1.setText("New Flight");
+        jLabel1.setText("Old Flight");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 51, 51));
@@ -313,6 +318,17 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 51, 51));
         jLabel3.setText("New Day: Hit Enter to submit");
 
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel4.setText("New Flight");
+
+        jButton5.setText("DROP FLIGHT");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -320,36 +336,51 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(82, 82, 82)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(flightnamefield, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
-                .addGap(43, 43, 43)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
                     .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(flightseatfield, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64)
-                        .addComponent(addbutton))
-                    .addComponent(jLabel2))
-                .addGap(115, 115, 115)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(dayfield, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(flightnamefield, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(dropfield, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(43, 43, 43)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel4Layout.createSequentialGroup()
+                                        .addComponent(flightseatfield, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(64, 64, 64)
+                                        .addComponent(addbutton))
+                                    .addComponent(jLabel2))
+                                .addGap(115, 115, 115)
+                                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(dayfield, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel4Layout.createSequentialGroup()
+                                .addGap(31, 31, 31)
+                                .addComponent(jButton5)))))
+                .addContainerGap(148, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(39, 39, 39)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(flightnamefield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(flightseatfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(addbutton)
                     .addComponent(dayfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(575, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(dropfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5))
+                .addContainerGap(451, Short.MAX_VALUE))
         );
 
         tabs.addTab("Admin", jPanel4);
@@ -385,9 +416,10 @@ public class MainFrame extends javax.swing.JFrame {
         Date d = Date.valueOf(daybox.getSelectedItem().toString());
         Days day = new Days(d);
         
-        Bookings b = new Bookings(c, f, day);
+        Bookings b = new Bookings(c, f, day, new Timestamp(System.currentTimeMillis()));
         
-        int result=Bookings.insertBooking(b);
+        
+        int result=Bookings.insertBooking(b,0);
         if(result==0){//if good book
             tabs.setSelectedIndex(1);
             dialog.showMessageDialog(this, "You have successfully booked your flight.", "Booking Successful", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
@@ -398,6 +430,10 @@ public class MainFrame extends javax.swing.JFrame {
         }
         if(result==2){//if conflict key
             dialog.showMessageDialog(this, "Cannot book for more than one flight", "Booking Error", dialog.INFORMATION_MESSAGE, new ImageIcon("b93.jpg"));
+        }
+        
+        if(result==3){//if flight drop
+            dialog.showMessageDialog(this, "A flight has been canceled", "Dropped Flight", dialog.INFORMATION_MESSAGE, new ImageIcon("b93.jpg"));
         }
         
         }
@@ -452,9 +488,14 @@ public class MainFrame extends javax.swing.JFrame {
     private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
         // TODO add your handling code here:
         String fName = flightnamefield.getText();
+        if(flightseatfield.getText().equals(""))
+             dialog.showMessageDialog(this, "Make sure to add seats", "Need Seats", dialog.INFORMATION_MESSAGE, new ImageIcon("tumblr_m30rap5QLo1r2o2do.png"));
+        else{
         int seats = Integer.parseInt(flightseatfield.getText());
-        
         Flights.addFlight(fName, seats);
+        dialog.showMessageDialog(this, fName+" has been added as a new flight with "+seats+" seats.", "Flight added", dialog.INFORMATION_MESSAGE, new ImageIcon("tumblr_m30rap5QLo1r2o2do.png"));
+        flightbox.setModel(new javax.swing.DefaultComboBoxModel(Flights.getFlights().toArray()));
+        }
     }//GEN-LAST:event_addbuttonActionPerformed
 
     private void dayfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dayfieldActionPerformed
@@ -464,9 +505,10 @@ public class MainFrame extends javax.swing.JFrame {
            Date temp=java.sql.Date.valueOf(dayfield.getText());
            Days.addDay(temp);
            dialog.showMessageDialog(this, dayfield.getText()+" has been added as a day", "Successful add", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
+           daybox.setModel(new javax.swing.DefaultComboBoxModel(Days.getDates().toArray()));
+        
         }catch(IllegalArgumentException e){
-            dialog.showMessageDialog(this, "Make sure to enter in sql-date format 'year, month, day' (yyyy-MM-dd) ", "Conversion Error", dialog.ERROR_MESSAGE);
-            
+            dialog.showMessageDialog(this, "Make sure to enter in sql-date format 'year, month, day' (yyyy-MM-dd) ", "Conversion Error", dialog.ERROR_MESSAGE);        
         }
         
        
@@ -494,20 +536,54 @@ public class MainFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         String dropResult;
         String cName = nameText.getText();
-        String fName = flightbox.getSelectedItem().toString(); 
         String dName = daybox.getSelectedItem().toString();
         
-        dropResult = Bookings.dropFlight(cName, fName, dName);
+        dropResult = Bookings.cancelFlight(cName,dName);
         
         if(dropResult=="")
-            dialog.showMessageDialog(this, "Nothing to drop", "No Drop", dialog.INFORMATION_MESSAGE, new ImageIcon("tumblr_m30rap5QLo1r2o2do.png"));
+            dialog.showMessageDialog(this, "Cancel Operation successful", "Default", dialog.INFORMATION_MESSAGE, new ImageIcon("tumblr_m30rap5QLo1r2o2do.png"));
         
         if(dropResult=="waitlist")
-            dialog.showMessageDialog(this, "You have been dropped from the waitlist", "Dropped from Waitlist", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
+            dialog.showMessageDialog(this, cName+ " has been dropped from the waitlist for this flight", "Dropped from Waitlist", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
         
         if(dropResult=="bookings")
-            dialog.showMessageDialog(this, "You have been dropped from the Bookings", "Dropped from Bookings", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
+            dialog.showMessageDialog(this, cName+" has been dropped from the Bookings for this flight", "Dropped from Bookings", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        String fName = dropfield.getText();
+        ArrayList<String> temp = Bookings.dropFlight(fName);
+         flightbox.setModel(new javax.swing.DefaultComboBoxModel(Flights.getFlights().toArray()));
+        
+        if(temp==null){
+            dialog.showMessageDialog(this, "Not a valid flight to be dropped", "Drop Error", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
+            
+        }
+       if(temp.isEmpty()){
+            dialog.showMessageDialog(this, "Rebooking successful", "Rearrange", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
+            
+        }    
+      if(!temp.isEmpty()){
+            dialog.showMessageDialog(this, "The following are without wings", "Rearrange", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
+            tabs.setSelectedIndex(2);
+            flightbox.setModel(new javax.swing.DefaultComboBoxModel(Flights.getFlights().toArray()));
+            jList2.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = temp.toArray(new String[0]);
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+            });
+        }
+        else{
+            dialog.showMessageDialog(this, "Drop operation successful", "Default", dialog.INFORMATION_MESSAGE, new ImageIcon("e40.jpg"));
+             flightbox.setModel(new javax.swing.DefaultComboBoxModel(Flights.getFlights().toArray()));
+            jList2.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = temp.toArray(new String[0]);
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+            });
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -551,6 +627,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField dayfield;
     private javax.swing.JLabel daylabel;
     private javax.swing.JOptionPane dialog;
+    private javax.swing.JTextField dropfield;
     private javax.swing.JComboBox<String> flightbox;
     private javax.swing.JLabel flightlabel;
     private javax.swing.JTextField flightnamefield;
@@ -559,10 +636,12 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
     private javax.swing.JPanel jPanel1;

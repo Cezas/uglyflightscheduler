@@ -13,6 +13,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 /**
@@ -23,11 +24,13 @@ public class Bookings {
     private final Flights flight;
     private final Customer customer;
     private final Days day;
+    private final Timestamp timestamp;
     
-    public Bookings(Customer c, Flights f, Days d){ 
+    public Bookings(Customer c, Flights f, Days d,  Timestamp t){ 
         flight=f;
         customer=c;
         day=d;
+        timestamp=new Timestamp(System.currentTimeMillis());
     }
     
     public Flights getFlight(){
@@ -43,7 +46,11 @@ public class Bookings {
         return day;
     }
     
-    public static int insertBooking(Bookings b){
+    public Timestamp getTime(){
+        return timestamp;
+    } 
+    
+    public static int insertBooking(Bookings b, int case1){
             Connection connection;
             ResultSet resultSet;
             Statement statement;
@@ -66,22 +73,27 @@ public class Bookings {
 
             
             if(seatsBooked<maxSeats){
-                PreparedStatement insertBooking= connection.prepareStatement("INSERT INTO Bookings (Customer, Flight, Day) values (?,?,?)");
+                PreparedStatement insertBooking= connection.prepareStatement("INSERT INTO Bookings (Customer, Flight, Day, timestamp) values (?,?,?,?)");
                 insertBooking.setString(1, b.getCustomer().getName());
                 insertBooking.setString(2, b.getFlight().getName());
                 insertBooking.setString(3, b.getDay().getDate().toString());
+                insertBooking.setString(4, b.getTime().toString());
                 insertBooking.executeUpdate();    
             }else{//otherwise, send to waitlist
-                return WaitList.insertWaiting(b);
+                if(case1==0)
+                    return WaitList.insertWaiting(b);
             }
-                 
-
+           
         }catch(SQLIntegrityConstraintViolationException e){
             return 2;//2=return conflict key
         }
+        
         catch(SQLException e){          
             e.printStackTrace();
         }   
+        
+        if(case1==1)    
+            return 3; 
         
         return 0;//0=returned good booking entry
     }
@@ -161,16 +173,15 @@ public class Bookings {
         return bookings;
     }
     
-    public static String dropFlight(String cName, String fName, String dName){
+    public static String cancelFlight(String cName,String dName){
          Connection connection;  
          ResultSet resultSet;
          boolean insideWait=false, insideBook=false;
         try{
            connection=Database.getConnection();
-           PreparedStatement checkWaitList = connection.prepareStatement("SELECT customer, flight, day FROM WaitList where customer = ? and flight = ? and day = ?");
+           PreparedStatement checkWaitList = connection.prepareStatement("SELECT customer, flight, day FROM WaitList where customer = ? and day = ?");
            checkWaitList.setString(1, cName);
-           checkWaitList.setString(2, fName);
-           checkWaitList.setDate(3, java.sql.Date.valueOf(dName));           
+           checkWaitList.setDate(2, java.sql.Date.valueOf(dName));           
            resultSet = checkWaitList.executeQuery();
            
            if(resultSet.next()){
@@ -178,20 +189,18 @@ public class Bookings {
            }
            
            if(insideWait){
-            PreparedStatement removeFlight = connection.prepareStatement("DELETE FROM Waitlist where customer = ? and flight = ? and day = ?");
+            PreparedStatement removeFlight = connection.prepareStatement("DELETE FROM Waitlist where customer = ? and day = ?");
             removeFlight.setString(1, cName);
-            removeFlight.setString(2, fName);
-            removeFlight.setDate(3, java.sql.Date.valueOf(dName));
+            removeFlight.setDate(2, java.sql.Date.valueOf(dName));
             
             removeFlight.executeUpdate();
             
             return "waitlist";
            }
            /**************************************/
-           PreparedStatement checkBookings = connection.prepareStatement("SELECT customer, flight, day FROM Bookings where customer = ? and flight = ? and day = ?");
+           PreparedStatement checkBookings = connection.prepareStatement("SELECT customer, day FROM Bookings where customer = ? and day = ?");
            checkBookings.setString(1, cName);
-           checkBookings.setString(2, fName);
-           checkBookings.setDate(3, java.sql.Date.valueOf(dName));
+           checkBookings.setDate(2, java.sql.Date.valueOf(dName));
            
            resultSet = checkBookings.executeQuery();
            
@@ -199,11 +208,11 @@ public class Bookings {
                insideBook=true;
            }
            
+           //not true?
            if(insideBook){
-            PreparedStatement removeFlight = connection.prepareStatement("DELETE FROM Bookings where customer = ? and flight = ? and day = ?");
+            PreparedStatement removeFlight = connection.prepareStatement("DELETE FROM Bookings where customer = ? and day = ?");
             removeFlight.setString(1, cName);
-            removeFlight.setString(2, fName);
-            removeFlight.setDate(3, Date.valueOf(dName));        
+            removeFlight.setDate(2, Date.valueOf(dName));        
             
             removeFlight.executeUpdate();
             
@@ -235,26 +244,163 @@ public class Bookings {
                 removeWait.setDate(3, java.sql.Date.valueOf(dayDate.toString()));          
                 removeWait.executeUpdate();
                 
-                PreparedStatement insertBooking= connection.prepareStatement("INSERT INTO Bookings (Customer, Flight, Day) values (?,?,?)");
+                PreparedStatement insertBooking= connection.prepareStatement("INSERT INTO Bookings (Customer, Flight, Day, Timestamp) values (?,?,?,?)");
                 insertBooking.setString(1, customerName);
                 insertBooking.setString(2, flightName);
-                insertBooking.setString(3, dayDate.toString());
+                insertBooking.setDate(3, dayDate);
+                insertBooking.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
                 insertBooking.executeUpdate();   
-                
-                
+         
             }    
              
             Bookings.getBookingsByDay();
             WaitList.getWaitList();
             return "bookings";
            }
-           
-           
+        }catch(SQLIntegrityConstraintViolationException e){
+                     
         }catch(SQLException e){
             e.printStackTrace();
         }
         
         return "";
+    }
+    
+    public static ArrayList<String> dropFlight(String fName){ 
+        Connection connection = Database.getConnection();
+        ResultSet resultSet;
+        //ArrayList<String> unbooked =  new ArrayList();
+        ArrayList<String> unbooked = new ArrayList();
+        try{
+            
+        //see if valid flight
+            PreparedStatement checkValid = connection.prepareStatement("Select flight from Bookings where flight = ?");
+            checkValid.setString(1, fName);
+            resultSet = checkValid.executeQuery();
+            
+            if(!resultSet.next())
+                return null;
+           
+            //remove the flight itself from the flights table
+            PreparedStatement clearFlights = connection.prepareStatement("DELETE From flights where names = ?");
+            clearFlights.setString(1, fName);
+            clearFlights.executeUpdate();
+            
+           //cancel those in waitlist
+           PreparedStatement emptyWaitList = connection.prepareStatement("DELETE FROM WaitList where flight=?");
+           emptyWaitList.setString(1, fName);      
+           emptyWaitList.executeUpdate();
+           
+           //get all passengers in booking
+           PreparedStatement getPassengers = connection.prepareStatement("SELECT customer, day, timestamp FROM Bookings where flight = ? order by timestamp asc, day asc");
+           getPassengers.setString(1, fName);           
+           resultSet = getPassengers.executeQuery();
+           
+           ResultSetMetaData metaData = resultSet.getMetaData();
+           int cols = metaData.getColumnCount();
+            
+           
+            String customerName="";
+            Date dayDate = Date.valueOf("1111-11-11");
+            Timestamp ts = new Timestamp(System.currentTimeMillis());
+                        
+            ArrayList<String> customers = new ArrayList();
+            ArrayList<Date> days = new ArrayList();
+            ArrayList<ArrayList<String>> customersPerDay = new ArrayList<ArrayList<String>>(); //should be parallel with days
+            
+            //ArrayList<Bookings> books= new ArrayList();
+            
+            while(resultSet.next()){
+            //collect values into lists for priority              
+                for(int i = 1; i <=cols; i++){
+                    if(metaData.getColumnName(i).equalsIgnoreCase("Customer")){
+                        customerName=resultSet.getObject(i).toString();
+                    }
+                    if(metaData.getColumnName(i).equalsIgnoreCase("Day"))
+                        dayDate=resultSet.getDate(i);           
+                    }
+                
+                days.add(dayDate);
+                customers.add(customerName);
+            }
+            
+            PreparedStatement clearBookings = connection.prepareStatement("DELETE From Bookings where flight = ?");
+            clearBookings.setString(1, fName);
+            clearBookings.executeUpdate();
+            
+            //getting all the flights for attempted booking
+            Statement statement = connection.createStatement();
+            resultSet=statement.executeQuery("SELECT names FROM flights");  
+            metaData=resultSet.getMetaData();
+            cols= metaData.getColumnCount();
+            String flightName="";
+            ArrayList<String> flightNames = new ArrayList();
+              while(resultSet.next()){ 
+            //collect values into lists for priority              
+                for(int i = 1; i <=cols; i++){
+                    if(metaData.getColumnName(i).equalsIgnoreCase("names"))
+                        flightName=resultSet.getObject(i).toString();                        
+                }
+                flightNames.add(flightName);
+              }
+              
+              
+         //int skip=0;     
+         flightName="";
+         customerName="";
+         dayDate = Date.valueOf("1111-11-11");
+         
+         PreparedStatement insertBookings = connection.prepareStatement("INSERT INTO Bookings (Customer, Flight, Day, Timestamp) values (?,?,?,?)");;
+         for(int i=0; i<customers.size();i++){
+             customerName=customers.get(i);
+             insertBookings.setString(1, customerName);
+             int unbookcount=0;
+             
+             System.out.println(customers);
+             for(int j=0; j<flightNames.size();j++){
+                 flightName=flightNames.get(j);
+                 insertBookings.setString(2, flightName);
+                 System.out.println(flightNames);
+                 //check occupancy
+                PreparedStatement getFlightSeats = connection.prepareStatement("select count(flight) from bookings where flight = ? and day = ?"); 
+                getFlightSeats.setString(1, flightName); 
+                getFlightSeats.setDate(2, days.get(i));            
+                resultSet = getFlightSeats.executeQuery(); 
+                resultSet.next(); 
+                int seatsBooked = resultSet.getInt(1);  //how many currently booked for that flight on that day
+            
+                PreparedStatement getMaxOccupancy = connection.prepareStatement("select seats from flights where names = ?");
+                getMaxOccupancy.setString(1, flightName);
+                resultSet = getMaxOccupancy.executeQuery();
+            
+                resultSet.next();       
+                int maxSeats = resultSet.getInt(1);
+            
+                if(seatsBooked<maxSeats){
+                    insertBookings.setDate(3, days.get(i));
+                    insertBookings.setTimestamp(4, new Timestamp(System.currentTimeMillis()));
+                    insertBookings.executeUpdate();
+                }
+                else{//otherwise, add to unbooked
+                    unbookcount++;
+                }
+               
+             } 
+              if(unbookcount==flightNames.size())
+                  unbooked.add(customerName);
+         }
+              
+          
+         
+         Bookings.getBookingsByDay();
+         WaitList.getWaitList();  
+        }catch(SQLIntegrityConstraintViolationException e){
+            
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        
+        return unbooked;
     }
 }
 
